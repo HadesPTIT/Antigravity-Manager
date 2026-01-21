@@ -227,6 +227,15 @@ print(response.choices[0].message.content)
                 - ✅ Progressive Enhancement: Supports more OpenAI standard sizes, `quality` parameter correctly mapped
                 - ✅ No Breaking Changes: Claude, Vertex, Gemini protocols unaffected
             -   **Impact**: Resolved OpenAI Images API parameter mapping issues, all protocols automatically benefit through `common_utils`
+        -   **[Enhancement] Image Model Quota Protection Support (Fix Issue #912)**:
+            -   **Background**: Users reported that the image generation model (G3 Image) lacked quota protection, causing accounts with exhausted quotas to still be used for image requests
+            -   **Fix Details**:
+                - **Backend Configuration**: Added `gemini-3-pro-image` to `default_monitored_models()` in `config.rs`, aligning with Smart Warmup and Pinned Quota Models lists
+                - **Frontend UI**: Added image model option in `QuotaProtection.tsx`, adjusted layout to 4 models per row (consistent with Smart Warmup)
+            -   **Impact**: 
+                - ✅ Backward Compatible: Existing configurations unaffected; new users or config resets will automatically include the image model
+                - ✅ Complete Protection: All 4 core models (Gemini 3 Flash, Gemini 3 Pro High, Claude 4.5 Sonnet, Gemini 3 Pro Image) are now monitored by quota protection
+                - ✅ Auto-trigger: When image model quota falls below threshold, accounts are automatically added to the protection list, preventing further consumption
     *   **v3.3.46 (2026-01-20)**:
         -   **[Enhancement] Deep Optimization & i18n Standardization for Token Stats (PR #892)**:
             -   **Unified UI/UX**: Implemented custom Tooltip components to unify hover styles across Area, Bar, and Pie charts, enhancing contrast and readability in Dark Mode.
